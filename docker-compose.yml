@@ -1,0 +1,46 @@
+version: '3'
+services:
+  app:
+    build:
+      context: ./docker/app
+      dockerfile: Dockerfile
+    image: challentdocker/app
+    volumes:
+     - .:/var/www/html
+    ports:
+     - "${APP_PORT}:80"
+    networks:
+     - challent-spotify
+  node:
+    image: node:9.8
+    volumes:
+     - .:/var/www/html
+    networks:
+     - challent-spotify
+  mysql:
+    image: mysql:5.7
+    ports:
+     - "${DB_PORT}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+    volumes:
+     - mysqldata:/var/lib/mysql
+    networks:
+     - challent-spotify
+  redis:
+    image: redis:alpine
+    volumes:
+     - redisdata:/data
+    networks:
+     - challent-spotify
+networks:
+  challent-spotify:
+    driver: "bridge"
+volumes:
+  mysqldata:
+    driver: "local"
+  redisdata:
+    driver: "local"
