@@ -83,3 +83,5 @@ también
 ./develop gulp
 
 ./develop node
+
+./develop test
